@@ -2,7 +2,8 @@ from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
 
 from backend.core.deps import SessionDep
-from backend.models.schemas import QuestionCreate, QuestionRead, QuestionUpdate, ResponseCreate, \
+from backend.models.schemas import QuestionCreate, QuestionRead, QuestionUpdate, \
+    QuestionWithResponsesRead, ResponseCreate, \
     ResponseRead, ResponseUpdate
 from backend.services.quiz_service import QuizService
 
@@ -31,14 +32,18 @@ def get_question(session: SessionDep, q_id: int):
     return question
 
 
-@router.get("/questions/{q_id}/responses", response_model=list[ResponseRead])
-def get_responses_for_question(session: SessionDep, q_id: int):
-    """ Returns the data for all responses for a given question
-
-    NB: Front-end route needs to be changed from '/question/search' to '/questions/{q_id}/responses'
-    """
-    responses = crud.get_responses_by_question(session, q_id)
+@router.get("/response/search", response_model=list[ResponseRead])
+def get_responses_for_question(session: SessionDep, question_id: int):
+    """ Returns the data for all responses for a given question"""
+    responses = crud.get_responses_by_question(session, question_id)
     return responses
+
+
+@router.get("/questions/{q_id}/responses", response_model=QuestionWithResponsesRead)
+def get_question_with_responses(session: SessionDep, q_id: int):
+    """ Returns a question and its responses """
+    question = crud.get_question(session, q_id)
+    return question
 
 
 @router.post("/questions", response_model=QuestionRead)

@@ -48,20 +48,16 @@ def create_games(session: SessionDep, games_data: GamesCreate) -> Any:
 
 
 @router.delete("/games/{games_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_games(session: SessionDep, games_id: int) -> Any:
+def delete_games(session: SessionDep, games_id: int) -> None:
     """ Delete a new paralympic Games
 
     The version returns 404 if the Games was not found and 204 if it was deleted
     You could modify and return 204 in both cases
-
-    Returns:
-        {}: empty dict
     """
     games = crud.delete_games(session, games_id)
     if games is None:
-        raise HTTPException(status_code=404, detail=f"Games with id {games_id} not found")
-    else:
-        return {}
+       raise HTTPException(status_code=404, detail=f"Games with id {games_id} not found")
+    return
 
 
 @router.put("/games/{games_id}")

@@ -63,7 +63,6 @@ class GamesCreate(GamesBase):
 class GamesRead(GamesBase):
     """Schema for reading a Games record"""
     id: int
-    model_config = ConfigDict(from_attributes=True)
 
 
 class GamesUpdate(SQLModel):
@@ -176,7 +175,6 @@ class DisabilityCreate(DisabilityBase):
 class DisabilityRead(DisabilityBase):
     """Schema for reading a Disability record"""
     id: int
-    model_config = ConfigDict(from_attributes=True)
 
 
 class DisabilityUpdate(SQLModel):
@@ -200,7 +198,6 @@ class HostCreate(HostBase):
 class HostRead(HostBase):
     """Schema for reading a Host record"""
     id: int
-    model_config = ConfigDict(from_attributes=True)
 
 
 class HostUpdate(SQLModel):
@@ -224,7 +221,6 @@ class CountryCreate(CountryBase):
 class CountryRead(CountryBase):
     """Schema for reading a Country record"""
     id: int
-    model_config = ConfigDict(from_attributes=True)
 
 
 class CountryUpdate(SQLModel):
@@ -245,7 +241,6 @@ class QuestionCreate(QuestionBase):
 class QuestionRead(QuestionBase):
     """Schema for reading a Question record"""
     id: int
-    model_config = ConfigDict(from_attributes=True)
 
 
 class QuestionUpdate(SQLModel):
@@ -268,7 +263,6 @@ class ResponseCreate(ResponseBase):
 class ResponseRead(ResponseBase):
     """Schema for reading a Response record"""
     id: int
-    model_config = ConfigDict(from_attributes=True)
 
 
 class ResponseUpdate(SQLModel):
@@ -277,6 +271,10 @@ class ResponseUpdate(SQLModel):
     response_text: Optional[str] = None
     is_correct: Optional[bool] = None
 
+
+# Created after Question and Response
+class QuestionWithResponsesRead(QuestionRead):
+    responses: list[ResponseRead] = []
 
 
 class ParalympicsRead(SQLModel):
