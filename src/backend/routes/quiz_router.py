@@ -49,14 +49,14 @@ def get_question_with_responses(session: SessionDep, q_id: int):
 @router.post("/questions", response_model=QuestionRead)
 def create_question(session: SessionDep, question_data: QuestionCreate):
     """ Creates a new question  """
-    new_question = crud.create_games(session, question_data)
+    new_question = crud.create_question(session, question_data)
     return new_question
 
 
 @router.post("/responses", response_model=ResponseRead)
-def create_question(session: SessionDep, question_data: QuestionCreate):
+def create_response(session: SessionDep, create_data: ResponseCreate):
     """ Creates a new question  """
-    new_question = crud.create_games(session, question_data)
+    new_question = crud.create_response(session, create_data)
     return new_question
 
 
@@ -78,7 +78,7 @@ def delete_response(session: SessionDep, response_id: int):
 
 
 @router.delete("/questions/{question_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_response(session: SessionDep, question_id: int):
+def delete_question(session: SessionDep, question_id: int):
     """ Delete a Question
 
     The version returns 404 if the Question was not found and 204 if it was deleted
@@ -121,7 +121,7 @@ def update_response(response_id: int, data: ResponseCreate, session: SessionDep)
 
     Note: model_dump() expects all fields to be present in the data and applies the validation
     """
-    r = crud.update_response(session=session, games_id=response_id, update_data=data.model_dump())
+    r = crud.update_response(session=session, r_id=response_id, update_data=data.model_dump())
     return r
 
 
@@ -131,6 +131,6 @@ def replace_response(response_id: int, data: ResponseUpdate, session: SessionDep
 
     Note: data.model_dump(exclude_unset=True) allows for only some fields to be present in the data
     """
-    r = crud.update_response(session=session, response_id=response_id,
+    r = crud.update_response(session=session, r_id=response_id,
                              update_data=data.model_dump(exclude_unset=True))
     return r
