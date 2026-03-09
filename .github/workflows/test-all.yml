@@ -5,9 +5,9 @@ name: Python application
 
 on:
   push:
-    branches: [ "week9" ]
+    branches: [ "week9", "master" ]
   pull_request:
-    branches: [ "week9" ]
+    branches: [ "week9", "master" ]
   workflow_dispatch:
 
 permissions:
