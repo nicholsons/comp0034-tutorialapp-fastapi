@@ -18,6 +18,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      TEST_DB: ${{ secrets.TEST_DB }}
+      DB_DRIVER: ${{ secrets.DB_DRIVER }}
+      ALGORITHM: ${{ secrets.ALGORITHM }}
+      ACCESS_TOKEN_EXPIRES: ${{ secrets.ACCESS_TOKEN_EXPIRES }}
+
     steps:
     - uses: actions/checkout@v6
     - name: Set up Python 3.12
