@@ -20,7 +20,7 @@ jobs:
    
     env:
       TEST_DB: ${{ secrets.TEST_DB }}
-      SECRET_KEY: ${{ secrets.DB_NAME }}
+      DB_DRIVER: ${{ secrets.DB_DRIVER }}
       ALGORITHM: ${{ secrets.ALGORITHM }}
       ACCESS_TOKEN_EXPIRES: ${{ secrets.ACCESS_TOKEN_EXPIRES }}
       
