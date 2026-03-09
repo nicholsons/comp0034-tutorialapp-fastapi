@@ -28,6 +28,15 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -e .
+    - name: Create .env file for testing
+      run: |
+        cat > .env << EOF
+        DB_DRIVER=sqlite:///
+        DB_NAME=paralympics.db
+        TEST_DB=test_paralympics.db
+        ALGORITHM=HS256
+        ACCESS_TOKEN_EXPIRES=30
+        EOF
     - name: Test with pytest
       run: |
         pytest
