@@ -1,8 +1,7 @@
 import pytest
 import sqlalchemy as sa
 from fastapi.testclient import TestClient
-from sqlalchemy import StaticPool, create_engine
-from sqlmodel import Session
+from sqlmodel import Session, SQLModel, create_engine, StaticPool
 
 from backend.core.config import settings
 from backend.core.deps import get_current_user, get_db
@@ -29,6 +28,7 @@ def session_fixture():
         # echo=True Added so you can see what is happening when you run tests that use the database
         # you may prefer to set this to False
     )
+    SQLModel.metadata.create_all(bind=engine)
     connection = engine.connect()
     transaction = connection.begin()
     session = Session(bind=connection)
