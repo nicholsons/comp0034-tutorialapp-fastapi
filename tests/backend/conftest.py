@@ -1,27 +1,17 @@
 import pytest
 import sqlalchemy as sa
 from fastapi.testclient import TestClient
-from sqlmodel import SQLModel, Session, StaticPool, create_engine
+from sqlmodel import SQLModel, Session, StaticPool, create_engine, select
 
 from backend.core.config import get_settings
+from backend.core.db import add_data
 from backend.core.deps import get_current_user, get_db
 from backend.main import create_app
-from backend.models.models import User
-
-
-@pytest.fixture(autouse=True)
-def set_test_env(monkeypatch):
-    """
-    Force test environment for the entire test suite.
-    """
-    monkeypatch.setenv("ENV", "testing")
-    get_settings.cache_clear()
-    yield
-    get_settings.cache_clear()
+from backend.models.models import User, Games
 
 
 @pytest.fixture(name="session")
-def session_fixture():
+def session_fixture(set_test_env):
     """ Creates a test database dependency.
 
     Rolls back all transactions after each test.
@@ -41,6 +31,11 @@ def session_fixture():
         # you may prefer to set this to False
     )
     SQLModel.metadata.create_all(bind=engine)
+    # Add data if empty
+    with Session(engine) as session:
+        games = session.exec(select(Games)).first()
+        if not games:
+            add_data(engine)
     connection = engine.connect()
     transaction = connection.begin()
     session = Session(bind=connection)

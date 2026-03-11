@@ -50,5 +50,5 @@ def get_settings():
     config_cls = config_cls_dict[env]
     return config_cls()
 
-
-settings = get_settings()
+# Removed so that get_settings() is called for either development or testing
+# settings = get_settings()
