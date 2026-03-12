@@ -4,16 +4,19 @@ import pandas as pd
 from sqlmodel import Session, create_engine, select, text
 
 import data
+from backend.core.config import get_settings
 from backend.models.models import *  # noqa
-from backend.core.config import settings
 
 # Consider moving the URL to a .env file and using Settings
 # sqlite_file = resources.files(data).joinpath("paralympics.db")
 # sqlite_url = f"sqlite:///{sqlite_file}"
 
 # Updated in week 8 to use settings class and .env file
-connect_args = {"check_same_thread": False}
-engine = create_engine(settings.database_url, connect_args=connect_args, echo=True)
+def get_engine():
+    settings = get_settings()
+    connect_args = {"check_same_thread": False}
+    engine = create_engine(settings.database_url, connect_args=connect_args, echo=True)
+    return engine
 
 
 def init_db(session: Session) -> None:
@@ -30,6 +33,7 @@ def init_db(session: Session) -> None:
     # SQLModel.metadata.create_all(engine)
 
     # Only add data if it does not already exist
+    engine = get_engine()
     with session:
         games = session.exec(select(Games)).first()
         if not games:

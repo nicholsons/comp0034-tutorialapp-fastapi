@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
 
-from backend.core.db import engine, init_db
+from backend.core.db import get_engine, init_db
 from backend.routes import auth_router, games_router, quiz_router
 
 # Create logs directory if it doesn't exist
@@ -45,6 +45,7 @@ async def lifespan(app: FastAPI):
         None:
     """
     # Startup: creates the database
+    engine = get_engine()
     with Session(engine) as session:
         logger.info("Initializing database...")
         init_db(session)
