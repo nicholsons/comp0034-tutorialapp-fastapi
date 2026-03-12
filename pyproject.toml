@@ -25,7 +25,8 @@ dependencies = [
     "ruff",
     "pytest-cov",
     "faker",
-    "pytest-playwright"
+    "pytest-playwright",
+    "pytest-env"
 ]
 
 [tool.setuptools]
@@ -90,3 +91,6 @@ indent-style = "space"
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.pytest_env]
+ENV = "testing"

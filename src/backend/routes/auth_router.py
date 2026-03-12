@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from backend.core import security
-from backend.core.deps import CurrentUser, SessionDep
+from backend.core.deps import SessionDep
 from backend.models.schemas import Token, UserCreate, \
     UserRead
 from backend.services.auth_service import AuthService
@@ -33,13 +33,6 @@ def login_access_token(
     return Token(
         access_token=security.create_access_token(user.id)
     )
-
-
-@router.post("/login/test-token", response_model=UserRead)
-def test_token(current_user: CurrentUser) -> Any:
-    """Test access token
-    """
-    return current_user
 
 
 @router.post("/signup", response_model=UserRead, status_code=status.HTTP_201_CREATED)

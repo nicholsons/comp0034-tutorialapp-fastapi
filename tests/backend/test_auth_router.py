@@ -1,5 +1,7 @@
 from faker import Faker
 
+from backend.core.security import verify_password
+
 fake = Faker()
 
 
@@ -42,3 +44,37 @@ def test_signup_invalid_password(client):
     assert response.status_code == 422
     assert "should have at least 4 characters" in response.json()["detail"][0]["msg"]
 
+
+def test_login_access_token_succeeds(client_with_auth, test_user):
+    password = "testpassword"
+    response = client_with_auth.post(
+        "/login/access-token",
+        data={"username": test_user.email, "password": password},
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+
+    assert "access_token" in data
+    assert data["access_token"] != ""
+    assert data["token_type"] == "bearer"
+
+
+def test_login_access_token_fails_incorrect_password(client, test_user):
+    password = "wrong"
+    response = client.post(
+        "/login/access-token",
+        data={"username": test_user.email, "password": password},
+    )
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Incorrect email or password"
+
+
+def test_login_access_token_fails_with_unregistered_user(client):
+    email=fake.email()
+    password=fake.password()
+    response = client.post(
+        "/login/access-token",
+        data={"username": email, "password": password},
+    )
+    assert response.status_code == 400
